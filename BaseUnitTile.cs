@@ -26,6 +26,7 @@ public abstract class BaseUnitTile : MonoBehaviour, IUnitTile
     
     protected Vector2 _localPosition;
     protected GameObject _modelUse;
+    protected UnitType _type;
 
     public BaseUnitTile(Vector2 position, UnitTileDefinition def){
         this._localPosition = position;
@@ -34,6 +35,7 @@ public abstract class BaseUnitTile : MonoBehaviour, IUnitTile
         this._speed = def._speed;
         this._modelUse = def._modelUse;
         this._name = def._name;
+        this._type = def._unitType;
     }
 
 
