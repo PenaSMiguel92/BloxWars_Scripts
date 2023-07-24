@@ -11,14 +11,12 @@ public class Tile : BaseTile
         _tileLocalPosition = tileLocalPosition;
         _tileWorldPosition = MainMap.LocalToWorldPosition(_tileLocalPosition);
         _tileDefinition = _tileDefUse;
+        DrawSelf();
     }
 
     public override void DrawSelf(){
-        Debug.Log("Drawing self.");
         if (_tileDefinition.ModelUse == null) return;
         _tileGroundObject = GameObject.Instantiate(_tileDefinition.ModelUse, _tileWorldPosition, Quaternion.AngleAxis(_rndAngle * Mathf.Rad2Deg, Vector3.up));
-        if (_tileDefinition.ModelUse == null) return;
-        _tileSurfaceObject = GameObject.Instantiate(_tileDefinition.ModelUse, _tileWorldPosition, Quaternion.AngleAxis(_rndAngle * Mathf.Rad2Deg, Vector3.up));
     }
 
     public override Vector2 tileLocalPosition { get { return _tileLocalPosition; } }

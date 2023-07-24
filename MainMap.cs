@@ -17,12 +17,12 @@ public static class MainMap
         MapGeneration.LoadMap = false;
 
         _map = MapGeneration.GenerateMap();
-        for (int x = 0; x < _mapSize.x; x++){
-            for (int y = 0; y < _mapSize.y; y++){
-                Tile _curTile = _map[x, y];
-                _curTile.DrawSelf();
-            }
-        }
+        // for (int x = 0; x < _mapSize.x; x++){
+        //     for (int y = 0; y < _mapSize.y; y++){
+        //         Tile _curTile = _map[x, y];
+        //         _curTile.DrawSelf();
+        //     }
+        // }
     }
 
     public static Vector3 LocalToWorldPosition(Vector2 _localPos){

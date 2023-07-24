@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class UnitTileDefinition : ScriptableObject
 {
-    public GameObject ModelUse;
-    public string Name;
-    public float Attack;
-    public float Defense;
-    public float Speed;
-    public string Structure = "0,0,0,0,1,0,0,0,0";
+    public GameObject _modelUse;
+    public string _name;
+    public UnitType _unitType;
+    public float _attack;
+    public float _defense;
+    public float _speed;
 }
