@@ -12,6 +12,7 @@ public interface IBuildingTile
     public bool Origin { get; }
 }
 
+
 public class DummyBuildingPiece : IBuildingTile
 {
     string _name;
@@ -33,8 +34,9 @@ public class DummyBuildingPiece : IBuildingTile
     public bool Origin { get { return _origin; } }
 }
 
-public abstract class BaseBuildingTile : MonoBehaviour, IBuildingTile
+public abstract class BaseBuildingTile : BaseTile, IBuildingTile
 {
+    protected Transform _transform;
     protected bool _origin;
     protected BuildingType _type;
     protected GameObject _modelUse;
@@ -44,27 +46,28 @@ public abstract class BaseBuildingTile : MonoBehaviour, IBuildingTile
     protected float _health;
     protected float _attack;
     protected float _defense;
-    protected Vector2 _localPosition;
 
-    public BaseBuildingTile(Vector2 position, BuildingTileDefinition def)
+    public void Awake()
     {
-        this._localPosition = position;
-        this._attack = def._attack;
-        this._defense = def._defense;
-        this._modelUse = def._modelUse;
-        this._name = def._name;
-        this._structure = def._structure;
-        this._origin = true;
-        this._type = def._buildingType;
-        ParseStructureString();
+        _transform = gameObject.GetComponent<Transform>();
+        this._localPosition = MainMap.WorldToLocalPosition(_transform.localPosition);
     }
 
+    public override void Initialize()
+    {
+        BuildingTileDefinition _def = (BuildingTileDefinition) this._definition;
+        this._name = _def._name;
+        this._attack = _def._attack;
+        this._defense = _def._defense;
+        this._structure = _def._structure;
+        this._type = _def._buildingType;
+        ParseStructureString();
+    }
     public string Name { get { return _name; } }
     public bool Origin {get { return _origin; } }
     public float Health { get { return _health; } }
     public float Attack { get { return _attack; } }
     public float Defense { get { return _defense; } }
-    public Vector2 LocalPosition { get { return _localPosition; } }
 
     public void ParseStructureString()
     {

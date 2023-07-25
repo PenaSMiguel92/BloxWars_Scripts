@@ -37,6 +37,7 @@ public class PlayerHandle : MonoBehaviour
     PlayerState _plrState = PlayerState.Loading;
     InputHandle _plrInput;
     PlayerInputState _plrInputState;
+    Player[] _players;
 
     public void Awake()
     {

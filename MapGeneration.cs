@@ -4,8 +4,8 @@ using UnityEngine;
 
 public static class MapGeneration
 {
-    private static BackgroundTileDefinition[] _tiles;
-    private static Vector2 _offset = new Vector2(5,5);
+    private static BaseTileDefinition[] _tiles;
+    private static Vector2 _offset = new Vector2(Random.value * 50, Random.value * 50);
     private static float _scale = 10f;
     private static Vector2 _mapSize;
     private static Vector2 _mapTileSize;
@@ -13,31 +13,42 @@ public static class MapGeneration
     private static bool _loadMap = false;
     private static string _filename = "Map01";
 
-    public static Tile[,] GenerateMap(){
-        //Debug.Log("Map Generation begin");
-        Tile[,] _map = new Tile[(int)_mapSize.x, (int)_mapSize.y];
-        if (!_loadMap){
-            for (int x = 0; x < _mapSize.x; x++){
-                for (int y = 0; y < _mapSize.y; y++){
-                    float _rndVal = Mathf.Clamp(Mathf.PerlinNoise(_offset.x + x / _mapSize.x * _scale, _offset.y + y / _mapSize.y * _scale), 0, 1);
-                    int _action = 0;
-                    foreach (float _threshold in _thresholds) {
-                        Debug.Log(_threshold);
-                        if (_rndVal < _threshold){
-                            break;
-                        }
-                        _action++;
-                    }
-                    BackgroundTileDefinition _tileUse = _tiles[_action];
+    public static Dictionary<string, BaseTile> GenerateMap()
+    {
+        Dictionary<string, BaseTile> _map = new Dictionary<string, BaseTile>();
+        if (!_loadMap)
+        {
+            for (int index = 0; index < _mapSize.x * _mapSize.y; index++)
+            {
+                int x = index % (int) _mapSize.x;
+                int y = index / (int) _mapSize.x;
 
-                    _map[x, y] = new Tile(new Vector2(x, y), _tileUse);
+                float _rndVal = Mathf.Clamp(Mathf.PerlinNoise(_offset.x + x / _mapSize.x * _scale, _offset.y + y / _mapSize.y * _scale), 0, 1);
+                int _action = 0;
+                foreach (float _threshold in _thresholds) {
+                    if (_rndVal <= _threshold){
+                        break;
+                    }
+                    _action++;
+                }
+                BaseTileDefinition _tileUse = _tiles[_action];
+
+                string _key = x.ToString() + "," + y.ToString();
+                if (!_map.ContainsKey(_key))
+                {
+                    Vector2 _location = new Vector2(x, y);
+                    GameObject _tileObject = GameObject.Instantiate(_tileUse._modelUse, MainMap.LocalToWorldPosition(_location), new Quaternion());
+                    BaseTile _baseTile = _tileObject.GetComponent<BaseTile>();
+                    _baseTile.Definition = _tileUse;
+                    _baseTile.Initialize();
+                    _map.Add(_key, _baseTile);
                 }
             }
         }
         return _map;
     }
 
-    public static BackgroundTileDefinition[] Tiles {
+    public static BaseTileDefinition[] Tiles {
         get {
             return _tiles;
         }

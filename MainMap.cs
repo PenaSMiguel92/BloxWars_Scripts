@@ -7,22 +7,14 @@ public static class MainMap
     private static Vector2 _mapSize; //keep a record of map size, reduce need to use .length , since this would be quicker.
     private static Vector2 _mapTileSize; //Reminder, this is the same size as the tile models, works out for positionioning of tiles.
     
-    private static Tile[,] _map;
+    private static Dictionary<string, BaseTile> _map;
     public static void InitializeMap(Vector2 mapSize, Vector2 mapTileSize){
-        //Debug.Log("Map Initializing");
         _mapSize = mapSize;
         _mapTileSize = mapTileSize;
         MapGeneration.MapSize = mapSize;
         MapGeneration.MapTileSize = mapTileSize;
         MapGeneration.LoadMap = false;
-
         _map = MapGeneration.GenerateMap();
-        // for (int x = 0; x < _mapSize.x; x++){
-        //     for (int y = 0; y < _mapSize.y; y++){
-        //         Tile _curTile = _map[x, y];
-        //         _curTile.DrawSelf();
-        //     }
-        // }
     }
 
     public static Vector3 LocalToWorldPosition(Vector2 _localPos){
