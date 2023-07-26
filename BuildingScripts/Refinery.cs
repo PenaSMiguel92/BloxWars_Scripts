@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConstructionYard : BaseBuildingTile
+public class Refinery : BaseBuildingTile
 {
     public void Start()
     {
-        this._type = BuildingType.ConstructionYard;
+        this._type = BuildingType.Refinery;
     }
 
 }

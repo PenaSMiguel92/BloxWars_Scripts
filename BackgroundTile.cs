@@ -10,6 +10,10 @@ public class BackgroundTile : BaseTile
     private bool _resource;
     private bool _constructable;
 
+    public void Awake()
+    {
+        this._tileType = TileType.Background;
+    }
     public override void Initialize()
     {
         BackgroundTileDefinition _def = (BackgroundTileDefinition) _definition;
@@ -23,7 +27,7 @@ public class BackgroundTile : BaseTile
         this._resourceAmount = _def.ResourceAmount;
     }
 
-    
+
 
     public bool IsAResource { get { return _resource; } }
     public bool Constructable {get { return _constructable; } }

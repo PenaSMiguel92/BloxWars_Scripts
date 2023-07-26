@@ -5,9 +5,6 @@ using UnityEngine;
 public enum UnitType {CarryAll, Gunman, Harvester, HeavyInfantry, Infantry, Launcher, Missiler, MCV, Quad, SiegeTank, Tank, Trike}
 public interface IUnitTile
 {
-    public void LookAt(Vector2 position);
-    public void MoveTo(Vector2 position);
-
     public float Health { get; }
     public float Attack { get; }
     public float Defense { get; }
@@ -26,8 +23,10 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     protected GameObject _modelUse;
     protected UnitType _type;
 
-    public BaseUnitTile(Vector2 position, UnitTileDefinition def){
-       
+    public void Awake()
+    {
+        this._tileType = TileType.Unit;
+        this._crossable = false;
     }
 
     public override void Initialize()
@@ -45,10 +44,6 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     public float Defense { get { return _defense; } }
     public float Speed { get { return _speed; } }
 
-
-    public abstract void Awake();
     public abstract void Start();
     public abstract void Update();
-    public abstract void MoveTo(Vector2 position);
-    public abstract void LookAt(Vector2 position);
 }

@@ -19,7 +19,7 @@ public class MainControl : MonoBehaviour
     public void Awake(){
         main = this;
         MapGeneration.Tiles = _tiles;
-        
+        UnitHandle.Tiles = _units;
     }
     public void Start()
     {

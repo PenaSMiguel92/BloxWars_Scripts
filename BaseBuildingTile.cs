@@ -13,33 +13,39 @@ public interface IBuildingTile
 }
 
 
-public class DummyBuildingPiece : IBuildingTile
+public class DummyBuildingPiece : BaseTile, IBuildingTile
 {
+    Transform _transform;
     string _name;
-    bool _origin;
+    bool _origin = false;
     float _health = 1;
-    Vector2 _originPosition;
-    Vector2 _localPosition;
-    public DummyBuildingPiece(string name, bool origin, Vector2 originPosition, Vector2 localPosition)
+    BaseBuildingTile _originMainTile;
+    BuildingType _type;
+
+    public void Awake()
     {
-        this._name = name;
-        this._origin = origin;
-        this._originPosition = originPosition;
-        this._localPosition = localPosition;
+        this._transform = gameObject.GetComponent<Transform>();
+        this._crossable = false;
+        this._localPosition = MainMap.WorldToLocalPosition(this._transform.localPosition);
     }
-    public Vector2 OriginPosition { get { return _originPosition; } }
-    public Vector2 LocalPosition { get { return _localPosition; } }
-    public string Name { get { return _name; } }
+    public override void Initialize()
+    {
+        BuildingTileDefinition _def = (BuildingTileDefinition) this._definition;
+        this._name = _def._name;
+        this._type = _def._buildingType;
+    }
+
+    public string Name { get { return _name; } set { _name = value; } }
     public float Health { get { return _health; } }
     public bool Origin { get { return _origin; } }
+    public BaseBuildingTile OriginMainTile {get { return _originMainTile; } set { _originMainTile = value; } }
 }
 
 public abstract class BaseBuildingTile : BaseTile, IBuildingTile
 {
     protected Transform _transform;
-    protected bool _origin;
+    protected bool _origin = true;
     protected BuildingType _type;
-    protected GameObject _modelUse;
     protected string _name;
     protected string _structure;
     protected bool[,] _structureArray;
@@ -49,7 +55,9 @@ public abstract class BaseBuildingTile : BaseTile, IBuildingTile
 
     public void Awake()
     {
-        _transform = gameObject.GetComponent<Transform>();
+        this._tileType = TileType.Building;
+        this._crossable = false;
+        this._transform = gameObject.GetComponent<Transform>();
         this._localPosition = MainMap.WorldToLocalPosition(_transform.localPosition);
     }
 
@@ -91,6 +99,5 @@ public abstract class BaseBuildingTile : BaseTile, IBuildingTile
                 continue;
 
         }
-        Debug.Log(_structureArray);
     }
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TrikeUnit : BaseUnitTile
+public class SiegeTankUnit : BaseUnitTile
 {
     public override void Start()
     {
-        this._type = UnitType.Trike;
+        this._type = UnitType.SiegeTank;
         throw new NotImplementedException();
     }
 

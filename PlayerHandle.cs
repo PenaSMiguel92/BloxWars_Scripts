@@ -37,7 +37,7 @@ public class PlayerHandle : MonoBehaviour
     PlayerState _plrState = PlayerState.Loading;
     InputHandle _plrInput;
     PlayerInputState _plrInputState;
-    Player[] _players;
+    List<Player> _players;
 
     public void Awake()
     {
@@ -48,6 +48,7 @@ public class PlayerHandle : MonoBehaviour
     }
     public void Start()
     {
+        
         MainControl.main.onGameBegin += PlayerInitialization;
     }
 
@@ -65,11 +66,49 @@ public class PlayerHandle : MonoBehaviour
     public void PlayerInitialization(object _sender, EventArgs _e)
     {
         _plrState = PlayerState.Init;
+
     }
 
     public void InitializePlayer()
     {
+        PlayerTeams _plrTeam = (PlayerTeams)(_players.Count + 1);
+        Color _teamColor = DetermineColorFromTeam(_plrTeam);
+        Player _newPlayer = new Player(_teamColor);
 
+        _players.Add(_newPlayer);
+        
+    }
+
+    public Color DetermineColorFromTeam(PlayerTeams _team)
+    {
+        Color _colorUse;
+        string _colorString;
+        switch(_team)
+        {
+            case PlayerTeams.Red:
+                _colorString = "#E74C3C";
+                break;
+            case PlayerTeams.Blue:
+                _colorString = "#3498DB";
+                break;
+            case PlayerTeams.Green:
+                _colorString = "#2ECC71";
+                break;
+            case PlayerTeams.Brown:
+                _colorString = "#E67E22";
+                break;
+            case PlayerTeams.Black:
+                _colorString = "#34495E";
+                break;
+            case PlayerTeams.Cyan:
+                _colorString = "#29B0B9";
+                break;
+            default:
+                _colorString = "#E74C3C";
+                break;
+        }
+        ColorUtility.TryParseHtmlString(_colorString, out _colorUse);
+        return _colorUse;
     }
     public void MouseMove(object _sender, InputValues _values)
     {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class MapGeneration
 {
+    
     private static BaseTileDefinition[] _tiles;
     private static Vector2 _offset = new Vector2(Random.value * 50, Random.value * 50);
     private static float _scale = 10f;
