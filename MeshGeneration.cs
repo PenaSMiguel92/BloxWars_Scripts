@@ -116,8 +116,8 @@ public static class MeshGeneration
                 new Vector3(-0.5f, -0.5f, 0.5f),
             };
             int[] _wedgeTriangles = new int[]{
-                3, 1, 2, 
-                3, 0, 1
+                2, 1, 3, 
+                1, 0, 3
             };
 
             foreach (int tri in _wedgeTriangles) {
