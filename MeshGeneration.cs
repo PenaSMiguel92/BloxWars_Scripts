@@ -106,7 +106,7 @@ public static class MeshGeneration
     }
     
 
-    private static List<Vector3> GenerateFace( bool isWedge, Face face) {
+    private static Vector3[] GenerateFace( bool isWedge, Face face) {
         List<Vector3> _vertices = new();
         int _curAngle = 0;
         const float _radius = 0.5f;
@@ -126,7 +126,7 @@ public static class MeshGeneration
             _vertices.Add(_nxtPos);
             _curAngle++;
         } while (_curAngle < 4);
-        return _vertices;
+        return _vertices.ToArray();
     }
 
     static Vector3 GetFaceOffset(Face face, float radius) {
@@ -161,15 +161,18 @@ public static class MeshGeneration
         foreach (Face face in _faceLookUpTable)
         {
             bool isWedge = DetermineIfWedge(shape, face);
-            List<Vector3> verts = GenerateFace(isWedge, face);
-            for (int index = 0;  index < verts.Count; index++)
-            {
-                _vertices.Add(verts[index]);
-                _triangles.Add(index);
+            Vector3[] verts = GenerateFace(isWedge, face);
+            int[] tris = GenerateTriangles(isWedge);
+            foreach (int tri in tris) {
+                _triangles.Add(tri + _vertices.Count);
+            }
+            foreach (Vector3 vert in verts) {
+                _vertices.Add(vert);
             }
         }
-        
 
+        _value.vertices = _vertices.ToArray();
+        _value.triangles = _triangles.ToArray();
         return _value;
     }
     
@@ -182,4 +185,7 @@ public static class MeshGeneration
         };
     }
 
+    private static int[] GenerateTriangles(bool isWedge) {
+        return isWedge ? new int[]{3, 1, 2} : new int[]{3, 1, 2, 0, 1, 3};
+    }
 }
