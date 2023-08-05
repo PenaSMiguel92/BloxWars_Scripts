@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class Barracks : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.Barracks;
-    }
+
 
 }

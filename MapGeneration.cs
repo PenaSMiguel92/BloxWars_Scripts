@@ -7,9 +7,9 @@ public static class MapGeneration
     
     private static BaseTileDefinition[] _tiles;
     private static Vector2 _offset = new Vector2(Random.value * 50, Random.value * 50);
-    private static float _scale = 10f;
-    private static Vector2 _mapSize;
-    private static Vector2 _mapTileSize;
+    private static float _scale = 15f;
+    private static Vector2Int _mapSize;
+    private static Vector2Int _mapTileSize;
     private static float[] _thresholds = {0.05f, 0.20f, 0.55f, 0.9f, 1f}; //double resource - 5%, resource - 15%, sand - 35% chance, stone - 30% chance, cliff - 10% chance 
     private static bool _loadMap = false;
     private static string _filename = "Map01";
@@ -24,7 +24,7 @@ public static class MapGeneration
                 int x = index % (int) _mapSize.x;
                 int y = index / (int) _mapSize.x;
 
-                float _rndVal = Mathf.Clamp(Mathf.PerlinNoise(_offset.x + x / _mapSize.x * _scale, _offset.y + y / _mapSize.y * _scale), 0, 1);
+                float _rndVal = Mathf.Clamp(Mathf.PerlinNoise(_offset.x + (x / (float)_mapSize.x) * _scale, _offset.y + (y / (float)_mapSize.x) * _scale), 0, 1);
                 int _action = 0;
                 foreach (float _threshold in _thresholds) {
                     if (_rndVal <= _threshold){
@@ -37,7 +37,7 @@ public static class MapGeneration
                 string _key = x.ToString() + "," + y.ToString();
                 if (!_map.ContainsKey(_key))
                 {
-                    Vector2 _location = new Vector2(x, y);
+                    Vector2Int _location = new Vector2Int(x, y);
                     GameObject _tileObject = GameObject.Instantiate(_tileUse._modelUse, MainMap.LocalToWorldPosition(_location), new Quaternion());
                     BaseTile _baseTile = _tileObject.GetComponent<BaseTile>();
                     _baseTile.Definition = _tileUse;
@@ -57,7 +57,7 @@ public static class MapGeneration
             _tiles = value;
         }
     }
-    public static Vector2 MapSize {
+    public static Vector2Int MapSize {
         get {
             return _mapSize;
         }
@@ -65,7 +65,7 @@ public static class MapGeneration
             _mapSize = value;
         }
     }
-    public static Vector2 MapTileSize {
+    public static Vector2Int MapTileSize {
         get {
             return _mapTileSize;
         }

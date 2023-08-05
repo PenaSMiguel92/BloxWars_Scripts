@@ -5,9 +5,5 @@ using UnityEngine;
 
 public class RadarOutpost : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.RadarOutpost;
-    }
 
 }

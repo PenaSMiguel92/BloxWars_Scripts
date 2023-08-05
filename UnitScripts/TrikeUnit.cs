@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class TrikeUnit : BaseUnitTile
 {
-    public override void Start()
-    {
-        this._type = UnitType.Trike;
-        throw new NotImplementedException();
-    }
+    // public override void Start()
+    // {
+    //     throw new NotImplementedException();
+    // }
 
-    public override void Update()
-    {
-        throw new NotImplementedException();
-    }
+    // public override void Update()
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

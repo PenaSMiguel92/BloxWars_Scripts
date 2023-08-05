@@ -8,4 +8,5 @@ public class UnitTileDefinition : BaseTileDefinition
     public float _attack;
     public float _defense;
     public float _speed;
+    
 }

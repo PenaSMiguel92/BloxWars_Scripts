@@ -5,9 +5,5 @@ using UnityEngine;
 
 public class ConstructionYard : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.ConstructionYard;
-    }
 
 }

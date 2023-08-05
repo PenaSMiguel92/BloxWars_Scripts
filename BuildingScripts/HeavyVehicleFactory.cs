@@ -5,9 +5,5 @@ using UnityEngine;
 
 public class HeavyVehicleFactory : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.HeavyVehicleFactory;
-    }
 
 }

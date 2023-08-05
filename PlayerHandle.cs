@@ -39,47 +39,34 @@ public class PlayerHandle : MonoBehaviour
     PlayerInputState _plrInputState;
     List<Player> _players;
 
-    public void Awake()
-    {
+    void Awake() {
         _plrInput = new InputHandle();
         _plrInput.onPlayerMouseLeftDown += MouseLeftDown;
         _plrInput.onPlayerMouseMove += MouseMove;
-        _plrInputState = new PlayerInputState();
-    }
-    public void Start()
-    {
-        
         MainControl.main.onGameBegin += PlayerInitialization;
+        _plrInputState = new PlayerInputState();
+        _players = new List<Player>();
     }
 
-    public void Update()
+    void PlayerInitialization(object _sender, EventArgs _e)
     {
-        switch(_plrState)
-        {
-            case PlayerState.Init:
-                InitializePlayer();
-                _plrState = PlayerState.Idle;
-                break;
-        }
-    }
-
-    public void PlayerInitialization(object _sender, EventArgs _e)
-    {
-        _plrState = PlayerState.Init;
+        Debug.Log("Initializing Player");
+        InitializePlayer();
+        _plrState = PlayerState.Idle;
 
     }
 
-    public void InitializePlayer()
+    void InitializePlayer()
     {
-        PlayerTeams _plrTeam = (PlayerTeams)(_players.Count + 1);
+        PlayerTeams _plrTeam = (PlayerTeams)(_players.Count);
         Color _teamColor = DetermineColorFromTeam(_plrTeam);
         Player _newPlayer = new Player(_teamColor);
 
         _players.Add(_newPlayer);
-        
+        UnitHandle.SpawnUnitAt(new Vector2Int(15, 15), _newPlayer, UnitType.MCV);
     }
 
-    public Color DetermineColorFromTeam(PlayerTeams _team)
+    Color DetermineColorFromTeam(PlayerTeams _team)
     {
         Color _colorUse;
         string _colorString;
@@ -110,33 +97,33 @@ public class PlayerHandle : MonoBehaviour
         ColorUtility.TryParseHtmlString(_colorString, out _colorUse);
         return _colorUse;
     }
-    public void MouseMove(object _sender, InputValues _values)
+    void MouseMove(object _sender, InputValues _values)
     {
         if (_plrState == PlayerState.Loading) return;
         if (_plrState == PlayerState.Init) return;
         UpdatePlayerInputState(_values.MousePosition, _values.LeftMouseButtonDown);
     }
 
-    public void MouseLeftDown(object _sender, InputValues _values)
+    void MouseLeftDown(object _sender, InputValues _values)
     {
         if (_plrState == PlayerState.Loading) return;
         if (_plrState == PlayerState.Init) return;
         UpdatePlayerInputState(_values.MousePosition, _values.LeftMouseButtonDown);
     }
 
-    public void UpdatePlayerInputState(Vector2 position, bool buttonstate)
+    void UpdatePlayerInputState(Vector2 position, bool buttonstate)
     {
         Vector2 _localMousePosition = ScreenToLocalMousePosition(position);
         _plrInputState.LocalMousePosition = _localMousePosition;
         _plrInputState.LeftMouseButtonDown = buttonstate;
     }
 
-    public Vector2 ScreenToLocalMousePosition(Vector2 _mousePosition){
+    Vector2 ScreenToLocalMousePosition(Vector2 _mousePosition){
         Vector3 _worldPosition = PositionRayCast(_mousePosition);
         return MainMap.WorldToLocalPosition(_worldPosition);
     }
 
-    public Vector3 PositionRayCast(Vector2 mousePosition)
+    Vector3 PositionRayCast(Vector2 mousePosition)
     {
         Plane _plane = new Plane(Vector3.up, Vector3.zero);
         Ray _ray = Camera.main.ScreenPointToRay(mousePosition);

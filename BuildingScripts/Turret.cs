@@ -5,9 +5,5 @@ using UnityEngine;
 
 public class Turret : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.Turret;
-    }
 
 }

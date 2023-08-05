@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class HeavyInfantryUnit : BaseUnitTile
 {
-    public override void Start()
-    {
-        this._type = UnitType.HeavyInfantry;
-        throw new NotImplementedException();
-    }
+    // public override void Start()
+    // {
+    //     throw new NotImplementedException();
+    // }
 
-    public override void Update()
-    {
-        throw new NotImplementedException();
-    }
+    // public override void Update()
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

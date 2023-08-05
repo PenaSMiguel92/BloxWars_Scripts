@@ -5,9 +5,5 @@ using UnityEngine;
 
 public class Slab_2x2 : BaseBuildingTile
 {
-    public void Start()
-    {
-        this._type = BuildingType.Slab_2x2;
-    }
 
 }
