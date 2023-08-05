@@ -20,22 +20,6 @@ public static class MeshGeneration
         public Vector3[] vertices;
         public int[] triangles;
     }
-    
-    //private static MeshFilter _meshFilter;
-    //private static Mesh _mesh;
-    //private static Vector3[] _vertices;
-    //private static int[] _triangles;
-    // Start is called before the first frame update
-    // void Start()
-    // {
-    //     _mesh = new Mesh();
-    //     _meshFilter = GetComponent<MeshFilter>();
-    //     _meshFilter.mesh = _mesh;
-
-    //     CreateShape();
-    //     UpdateMesh();
-
-    // }
 
     public static Mesh CreateShape(MeshShape shape)
     {
@@ -51,58 +35,6 @@ public static class MeshGeneration
         mesh.RecalculateNormals();
 
         return mesh;
-        // _vertices = new Vector3[] {
-        //     //Bottom Face
-        //     new Vector3(-0.5f, -0.5f, -0.5f),
-        //     new Vector3(-0.5f, -0.5f, 0.5f),
-        //     new Vector3(0.5f, -0.5f, -0.5f),
-
-        //     //Forward Face
-        //     new Vector3(-0.5f, -0.5f, 0.5f),
-        //     new Vector3(-0.5f, 0.5f, 0.5f),
-        //     new Vector3(0.5f, 0.5f, -0.5f),
-        //     new Vector3(0.5f, -0.5f, -0.5f),
-            
-        //     //Top Face
-        //     new Vector3(-0.5f, 0.5f, -0.5f),
-        //     new Vector3(-0.5f, 0.5f, 0.5f),
-        //     new Vector3(0.5f, 0.5f, -0.5f),
-
-        //     //Left Face
-        //     new Vector3(-0.5f, -0.5f, -0.5f),
-        //     new Vector3(-0.5f, 0.5f, -0.5f),
-        //     new Vector3(-0.5f, 0.5f, 0.5f),
-        //     new Vector3(-0.5f, -0.5f, 0.5f),
-            
-        //     //Back Face
-        //     new Vector3(-0.5f, -0.5f, -0.5f),
-        //     new Vector3(-0.5f, 0.5f, -0.5f),
-        //     new Vector3(0.5f, 0.5f, -0.5f),
-        //     new Vector3(0.5f, -0.5f, -0.5f)
-            
-
-        // };
-
-        // _triangles = new int[]{
-        //     //Bottom Face - 0, 1, 2
-        //     2, 1, 0,
-            
-        //     //Forward Face - 3, 4, 5, 6
-        //     5, 4, 3,
-        //     3, 6, 5,
-
-        //     //Top Face - 7, 8, 9
-        //     7, 8, 9, 
-
-        //     //Left Face - 10, 11, 12, 13
-        //     12, 11, 10,
-        //     10, 13, 12,
-
-        //     //Back Face - 14, 15, 16, 17
-        //     14, 15, 16,
-        //     16, 17, 14
-
-        // };
     }
     
 
