@@ -8,8 +8,12 @@ public static class MeshGeneration
 {
     private enum Face {Back, Left, Right, Front, Top, Bottom}
     private enum Plane {Axial, Coronal, Sagittal}
+    private readonly static Plane[] _facePlanesLookUpTable = { Plane.Coronal, Plane.Sagittal, Plane.Sagittal, Plane.Coronal, Plane.Axial, Plane.Axial };
     private const float PIOVERFOUR = Mathf.PI * 0.25f;
-    private const float PIOVERTWO = Mathf.PI * 0.5f;
+    private const float SQRTOFTWOOVERTWO = 0.707106781f;
+    private readonly static float[] _cosLookUpTable = { SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, SQRTOFTWOOVERTWO };
+    private readonly static float[] _sinLookUpTable = { SQRTOFTWOOVERTWO, SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO };
+    
     //private static MeshFilter _meshFilter;
     //private static Mesh _mesh;
     //private static Vector3[] _vertices;
@@ -43,11 +47,13 @@ public static class MeshGeneration
 
     // }
 
-    private static Vector3[] GenerateFace(Plane plane, bool IsWedge) {
-        List<Vector3> _vertices = new List<Vector3>();
+    private static Vector3[] GenerateFace( bool IsWedge, Face face) {
+        List<Vector3> _vertices = new();
         int _curAngle = 0;
         const float _radius = 0.5f;
-
+        Plane plane = _facePlanesLookUpTable[(int)face];
+        Vector3 faceOffset = GetFaceOffset(face, _radius);
+        
         do
         {
             if (IsWedge && _curAngle == 0)
@@ -55,23 +61,37 @@ public static class MeshGeneration
                 _curAngle++;
                 continue;
             }
-            Vector3 _nxtPos = new Vector3();
-            switch (plane) {
-                case Plane.Axial:
-                    _nxtPos = new Vector3(_radius * Mathf.Cos(_curAngle*PIOVERTWO), 0, _radius * Mathf.Sin(_curAngle*PIOVERTWO));
-                    break;
-                case Plane.Coronal:
-                    _nxtPos = new Vector3(_radius * Mathf.Cos(_curAngle*PIOVERTWO), _radius * Mathf.Sin(_curAngle*PIOVERTWO), 0);
-                    break;
-                case Plane.Sagittal:
-                    _nxtPos = new Vector3(0, _radius * Mathf.Sin(_curAngle*PIOVERTWO), _radius * Mathf.Cos(_curAngle*PIOVERTWO));
-                    break;
-            }
+            Vector3 _nxtPos = GetPosition(plane, _curAngle) + faceOffset;
+            
             Debug.Log(_nxtPos);
             _vertices.Add(_nxtPos);
             _curAngle++;
         } while (_curAngle < 4);
         return _vertices.ToArray();
+    }
+
+    static Vector3 GetFaceOffset(Face face, float radius) {
+
+        return face switch
+        {
+            Face.Back => new Vector3(0, 0, -radius),
+            Face.Bottom => new Vector3(0, -radius, 0),
+            Face.Front => new Vector3(0, 0, radius),
+            Face.Left => new Vector3(-radius, 0, 0),
+            Face.Right => new Vector3(radius, 0, 0),
+            Face.Top => new Vector3(0, radius, 0),
+            _ => Vector3.zero
+        };
+    }
+
+    static Vector3 GetPosition(Plane plane, int curAngle) {
+        return plane switch
+        {
+            Plane.Axial => new Vector3(SQRTOFTWOOVERTWO * _cosLookUpTable[curAngle], 0, SQRTOFTWOOVERTWO * _sinLookUpTable[curAngle]),
+            Plane.Coronal => new Vector3(SQRTOFTWOOVERTWO * _cosLookUpTable[curAngle], SQRTOFTWOOVERTWO * _sinLookUpTable[curAngle], 0),
+            Plane.Sagittal => new Vector3(0, SQRTOFTWOOVERTWO * _sinLookUpTable[curAngle], SQRTOFTWOOVERTWO * _cosLookUpTable[curAngle]),
+            _ => Vector3.zero
+        };
     }
 
     // public static Mesh CreateShape()
