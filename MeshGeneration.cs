@@ -4,15 +4,22 @@ using UnityEngine;
 
 
 public enum MeshShape {Cube, Wedge};
+
+
 public static class MeshGeneration
 {
     private enum Face {Back, Left, Right, Front, Top, Bottom}
     private enum Plane {Axial, Coronal, Sagittal}
+    private readonly static Face[] _faceLookUpTable = { Face.Back, Face.Left, Face.Right, Face.Front, Face.Top, Face.Bottom };
     private readonly static Plane[] _facePlanesLookUpTable = { Plane.Coronal, Plane.Sagittal, Plane.Sagittal, Plane.Coronal, Plane.Axial, Plane.Axial };
     private const float PIOVERFOUR = Mathf.PI * 0.25f;
     private const float SQRTOFTWOOVERTWO = 0.707106781f;
     private readonly static float[] _cosLookUpTable = { SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, SQRTOFTWOOVERTWO };
     private readonly static float[] _sinLookUpTable = { SQRTOFTWOOVERTWO, SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO, -SQRTOFTWOOVERTWO };
+    private struct MeshParams {
+        public Vector3[] vertices;
+        public int[] triangles;
+    }
     
     //private static MeshFilter _meshFilter;
     //private static Mesh _mesh;
@@ -30,24 +37,76 @@ public static class MeshGeneration
 
     // }
 
+    public static Mesh CreateShape(MeshShape shape)
+    {
+        Mesh mesh = new();
+        MeshParams meshParams = GenerateShape(shape);
+        Vector3[] vertices = meshParams.vertices;
+        int[] triangles = meshParams.triangles;
+        
 
-    // private static Vector3[] GenerateVertices(MeshShape shape) {
-    //     List<Vector3> _vertices;
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
 
-    //     switch(shape)
-    //     {
-    //         case MeshShape.Cube:
-    //             break;
-    //         case MeshShape.Wedge:
-    //             break;
+        return mesh;
+        // _vertices = new Vector3[] {
+        //     //Bottom Face
+        //     new Vector3(-0.5f, -0.5f, -0.5f),
+        //     new Vector3(-0.5f, -0.5f, 0.5f),
+        //     new Vector3(0.5f, -0.5f, -0.5f),
 
-    //     }
+        //     //Forward Face
+        //     new Vector3(-0.5f, -0.5f, 0.5f),
+        //     new Vector3(-0.5f, 0.5f, 0.5f),
+        //     new Vector3(0.5f, 0.5f, -0.5f),
+        //     new Vector3(0.5f, -0.5f, -0.5f),
+            
+        //     //Top Face
+        //     new Vector3(-0.5f, 0.5f, -0.5f),
+        //     new Vector3(-0.5f, 0.5f, 0.5f),
+        //     new Vector3(0.5f, 0.5f, -0.5f),
 
-    //     return _vertices.ToArray();
+        //     //Left Face
+        //     new Vector3(-0.5f, -0.5f, -0.5f),
+        //     new Vector3(-0.5f, 0.5f, -0.5f),
+        //     new Vector3(-0.5f, 0.5f, 0.5f),
+        //     new Vector3(-0.5f, -0.5f, 0.5f),
+            
+        //     //Back Face
+        //     new Vector3(-0.5f, -0.5f, -0.5f),
+        //     new Vector3(-0.5f, 0.5f, -0.5f),
+        //     new Vector3(0.5f, 0.5f, -0.5f),
+        //     new Vector3(0.5f, -0.5f, -0.5f)
+            
 
-    // }
+        // };
 
-    private static Vector3[] GenerateFace( bool IsWedge, Face face) {
+        // _triangles = new int[]{
+        //     //Bottom Face - 0, 1, 2
+        //     2, 1, 0,
+            
+        //     //Forward Face - 3, 4, 5, 6
+        //     5, 4, 3,
+        //     3, 6, 5,
+
+        //     //Top Face - 7, 8, 9
+        //     7, 8, 9, 
+
+        //     //Left Face - 10, 11, 12, 13
+        //     12, 11, 10,
+        //     10, 13, 12,
+
+        //     //Back Face - 14, 15, 16, 17
+        //     14, 15, 16,
+        //     16, 17, 14
+
+        // };
+    }
+    
+
+    private static List<Vector3> GenerateFace( bool isWedge, Face face) {
         List<Vector3> _vertices = new();
         int _curAngle = 0;
         const float _radius = 0.5f;
@@ -56,7 +115,7 @@ public static class MeshGeneration
         
         do
         {
-            if (IsWedge && _curAngle == 0)
+            if (isWedge && _curAngle == 0)
             {
                 _curAngle++;
                 continue;
@@ -67,7 +126,7 @@ public static class MeshGeneration
             _vertices.Add(_nxtPos);
             _curAngle++;
         } while (_curAngle < 4);
-        return _vertices.ToArray();
+        return _vertices;
     }
 
     static Vector3 GetFaceOffset(Face face, float radius) {
@@ -94,69 +153,33 @@ public static class MeshGeneration
         };
     }
 
-    // public static Mesh CreateShape()
-    // {
-    //     _vertices = new Vector3[] {
-    //         //Bottom Face
-    //         new Vector3(-0.5f, -0.5f, -0.5f),
-    //         new Vector3(-0.5f, -0.5f, 0.5f),
-    //         new Vector3(0.5f, -0.5f, -0.5f),
 
-    //         //Forward Face
-    //         new Vector3(-0.5f, -0.5f, 0.5f),
-    //         new Vector3(-0.5f, 0.5f, 0.5f),
-    //         new Vector3(0.5f, 0.5f, -0.5f),
-    //         new Vector3(0.5f, -0.5f, -0.5f),
-            
-    //         //Top Face
-    //         new Vector3(-0.5f, 0.5f, -0.5f),
-    //         new Vector3(-0.5f, 0.5f, 0.5f),
-    //         new Vector3(0.5f, 0.5f, -0.5f),
-
-    //         //Left Face
-    //         new Vector3(-0.5f, -0.5f, -0.5f),
-    //         new Vector3(-0.5f, 0.5f, -0.5f),
-    //         new Vector3(-0.5f, 0.5f, 0.5f),
-    //         new Vector3(-0.5f, -0.5f, 0.5f),
-            
-    //         //Back Face
-    //         new Vector3(-0.5f, -0.5f, -0.5f),
-    //         new Vector3(-0.5f, 0.5f, -0.5f),
-    //         new Vector3(0.5f, 0.5f, -0.5f),
-    //         new Vector3(0.5f, -0.5f, -0.5f)
-            
-
-    //     };
-
-    //     _triangles = new int[]{
-    //         //Bottom Face - 0, 1, 2
-    //         2, 1, 0,
-            
-    //         //Forward Face - 3, 4, 5, 6
-    //         5, 4, 3,
-    //         3, 6, 5,
-
-    //         //Top Face - 7, 8, 9
-    //         7, 8, 9, 
-
-    //         //Left Face - 10, 11, 12, 13
-    //         12, 11, 10,
-    //         10, 13, 12,
-
-    //         //Back Face - 14, 15, 16, 17
-    //         14, 15, 16,
-    //         16, 17, 14
-
-    //     };
-    // }
-
-    // void UpdateMesh(){
-    //     _mesh.Clear();
-
-    //     _mesh.vertices = _vertices;
-    //     _mesh.triangles = _triangles;
-    //     _mesh.RecalculateNormals();
+    private static MeshParams GenerateShape(MeshShape shape) {
+        MeshParams _value = new();
+        List<Vector3> _vertices = new();
+        List<int> _triangles = new();
+        foreach (Face face in _faceLookUpTable)
+        {
+            bool isWedge = DetermineIfWedge(shape, face);
+            List<Vector3> verts = GenerateFace(isWedge, face);
+            for (int index = 0;  index < verts.Count; index++)
+            {
+                _vertices.Add(verts[index]);
+                _triangles.Add(index);
+            }
+        }
         
-    // }
+
+        return _value;
+    }
+    
+    private static bool DetermineIfWedge(MeshShape shape, Face face) {
+        return shape switch
+        {
+            MeshShape.Cube => false,
+            MeshShape.Wedge => face == Face.Top || face == Face.Bottom,
+            _ => false
+        };
+    }
 
 }
