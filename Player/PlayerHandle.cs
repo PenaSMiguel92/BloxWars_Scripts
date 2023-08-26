@@ -5,32 +5,6 @@ using UnityEngine;
 
 public enum PlayerState {Loading, Init, Idle, Selection, Move}
 public enum PlayerTeams {Red, Blue, Green, Brown, Black, Cyan}
-public struct PlayerInputState
-{
-    public PlayerInputState(Vector2 localMousePos, bool leftMouseButtonDown)
-    {
-        LocalMousePosition = localMousePos;
-        LeftMouseButtonDown = leftMouseButtonDown;
-    }
-    public Vector2 LocalMousePosition { get; set; }
-    public bool LeftMouseButtonDown { get; set; }
-
-}
-
-public struct Player
-{
-    public Player(Color teamColor)
-    {
-        TeamColor = teamColor;
-        Credits = 0;
-        Units = new Dictionary<string, BaseUnitTile>();
-        Buildings = new Dictionary<string, BaseBuildingTile>();
-    }
-    public Color TeamColor { get; set; }
-    public int Credits { get; set; }
-    public Dictionary<string, BaseUnitTile> Units { get; set; }
-    public Dictionary<string, BaseBuildingTile> Buildings { get; set; }
-}
 
 public class PlayerHandle : MonoBehaviour 
 {
