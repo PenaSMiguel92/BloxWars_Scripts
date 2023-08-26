@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerHandle : MonoBehaviour 
 {
     
-    List<Player> _players;
+    private List<Player> players;
 
     void Awake() {
         
         MainControl.main.onGameBegin += PlayerInitialization;
-        _players = new List<Player>();
+        players = new List<Player>();
     }
 
     void PlayerInitialization(object _sender, EventArgs _e)
@@ -20,12 +20,12 @@ public class PlayerHandle : MonoBehaviour
 
     void InitializePlayer()
     {
-        PlayerTeams _plrTeam = (PlayerTeams)(_players.Count);
-        Color _teamColor = DetermineColorFromTeam(_plrTeam);
-        Player _newPlayer = new Player(_teamColor);
+        PlayerTeams playerTeam = (PlayerTeams)(players.Count);
+        Color teamColor = DetermineColorFromTeam(playerTeam);
+        Player newPlayer = new Player(teamColor);
 
-        _players.Add(_newPlayer);
-        UnitHandle.SpawnUnitAt(new Vector2Int(15, 15), _newPlayer, UnitType.MCV);
+        players.Add(newPlayer);
+        UnitHandle.SpawnUnitAt(new Vector2Int(15, 15), newPlayer, UnitType.MCV);
     }
 
     Color DetermineColorFromTeam(PlayerTeams _team)

@@ -32,7 +32,7 @@ public static class MainMap
 
     public static Vector2Int WorldToLocalPosition(Vector3 worldPos)
     {
-        Vector2Int _localPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / MapTileSize.x), Mathf.RoundToInt(worldPos.y / MapTileSize.y));
+        Vector2Int _localPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / MapTileSize.x), Mathf.RoundToInt(worldPos.z / MapTileSize.y));
         return _localPos;
     }
 

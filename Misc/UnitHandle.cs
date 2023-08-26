@@ -5,10 +5,10 @@ using UnityEngine;
 
 public static class UnitHandle
 {
-    static BaseTileDefinition[] _tiles;
+    private static BaseTileDefinition[] tiles;
     public static bool SpawnUnitAt(Vector2Int position, Player owner, UnitType unitType)
     {
-        UnitTileDefinition _unitDefinition = (UnitTileDefinition)_tiles[(int)unitType];
+        UnitTileDefinition _unitDefinition = (UnitTileDefinition)tiles[(int)unitType];
         List<TileInfo> _tileInfos = MainMap.GetRelativePositions(position, _unitDefinition, TileType.Unit);
         if (MainMap.CheckPositions(_tileInfos, TileType.Unit))
         {
@@ -45,10 +45,10 @@ public static class UnitHandle
     public static BaseTileDefinition[] Tiles 
     {
         get {
-            return _tiles;
+            return tiles;
         }
         set {
-            _tiles = value;
+            tiles = value;
         }
     }
 
