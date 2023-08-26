@@ -1,33 +1,21 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState {Loading, Init, Idle, Selection, Move}
-public enum PlayerTeams {Red, Blue, Green, Brown, Black, Cyan}
-
 public class PlayerHandle : MonoBehaviour 
 {
-    PlayerState _plrState = PlayerState.Loading;
-    InputHandle _plrInput;
-    PlayerInputState _plrInputState;
+    
     List<Player> _players;
 
     void Awake() {
-        _plrInput = new InputHandle();
-        _plrInput.onPlayerMouseLeftDown += MouseLeftDown;
-        _plrInput.onPlayerMouseMove += MouseMove;
+        
         MainControl.main.onGameBegin += PlayerInitialization;
-        _plrInputState = new PlayerInputState();
         _players = new List<Player>();
     }
 
     void PlayerInitialization(object _sender, EventArgs _e)
     {
-        Debug.Log("Initializing Player");
         InitializePlayer();
-        _plrState = PlayerState.Idle;
-
     }
 
     void InitializePlayer()
@@ -71,41 +59,5 @@ public class PlayerHandle : MonoBehaviour
         ColorUtility.TryParseHtmlString(_colorString, out _colorUse);
         return _colorUse;
     }
-    void MouseMove(object _sender, InputValues _values)
-    {
-        if (_plrState == PlayerState.Loading) return;
-        if (_plrState == PlayerState.Init) return;
-        UpdatePlayerInputState(_values.MousePosition, _values.LeftMouseButtonDown);
-    }
-
-    void MouseLeftDown(object _sender, InputValues _values)
-    {
-        if (_plrState == PlayerState.Loading) return;
-        if (_plrState == PlayerState.Init) return;
-        UpdatePlayerInputState(_values.MousePosition, _values.LeftMouseButtonDown);
-    }
-
-    void UpdatePlayerInputState(Vector2 position, bool buttonstate)
-    {
-        Vector2 _localMousePosition = ScreenToLocalMousePosition(position);
-        _plrInputState.LocalMousePosition = _localMousePosition;
-        _plrInputState.LeftMouseButtonDown = buttonstate;
-    }
-
-    Vector2 ScreenToLocalMousePosition(Vector2 _mousePosition){
-        Vector3 _worldPosition = PositionRayCast(_mousePosition);
-        return MainMap.WorldToLocalPosition(_worldPosition);
-    }
-
-    Vector3 PositionRayCast(Vector2 mousePosition)
-    {
-        Plane _plane = new Plane(Vector3.up, Vector3.zero);
-        Ray _ray = Camera.main.ScreenPointToRay(mousePosition);
-        float _entry;
-        if (_plane.Raycast(_ray, out _entry))
-        {
-            return _ray.GetPoint(_entry);
-        }
-        return new Vector3();
-    }
+    
 }
