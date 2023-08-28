@@ -5,6 +5,7 @@ public class Player
     private PlayerState playerState = PlayerState.Loading;
     private InputHandle playerInput = new InputHandle();
     private PlayerInputState playerInputState = new PlayerInputState();
+    private PlayerSelection playerSelection;
     private Color teamColor;
     private int credits;
     private Dictionary<string, BaseUnitTile> units;
@@ -15,9 +16,10 @@ public class Player
         this.credits = 0;
         this.units = new Dictionary<string, BaseUnitTile>();
         this.buildings = new Dictionary<string, BaseBuildingTile>();
-        playerInput.onPlayerMouseLeftDown += MouseLeftDown;
-        playerInput.onPlayerMouseMove += MouseMove;
-        playerState = PlayerState.Idle;
+        this.playerSelection = new PlayerSelection();
+        this.playerInput.onPlayerMouseLeftDown += MouseLeftDown;
+        this.playerInput.onPlayerMouseMove += MouseMove;
+        this.playerState = PlayerState.Idle;
     }
     void MouseMove(object _sender, InputValues _values)
     {
