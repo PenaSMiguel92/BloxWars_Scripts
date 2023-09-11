@@ -11,9 +11,7 @@ public class PlayerSelection
 
     }
 
-    public void issueOrders(PlayerOrders order, Vector2 location, double radius) {
-
-    }
+    
 
     public void deselect() {
 
