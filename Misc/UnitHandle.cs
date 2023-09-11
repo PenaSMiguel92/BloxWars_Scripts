@@ -16,6 +16,7 @@ public static class UnitHandle
             GameObject _unitObj = GameObject.Instantiate(_unitDefinition._modelUse, _unitLocation, new Quaternion());
             BaseUnitTile _unitTile = _unitObj.GetComponent<BaseUnitTile>();
             _unitTile.Definition = _unitDefinition;
+            _unitTile.Owner = owner;
             _unitTile.Initialize();
             string _strKey = position.x.ToString() + "," + position.y.ToString();
             owner.Units.Add(_strKey, _unitTile);

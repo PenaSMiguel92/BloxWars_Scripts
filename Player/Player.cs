@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public class Player
@@ -40,6 +41,12 @@ public class Player
         Vector2 _localMousePosition = ScreenToLocalMousePosition(position);
         playerInputState.LocalMousePosition = _localMousePosition;
         playerInputState.LeftMouseButtonDown = buttonstate;
+
+        string _strKey = _localMousePosition.x.ToString() + "," + _localMousePosition.y.ToString();
+        BaseUnitTile unit;
+        if (units.ContainsKey(_strKey) && units.TryGetValue(_strKey, out unit)) {
+            unit.Select(this);
+        }
     }
 
     Vector2 ScreenToLocalMousePosition(Vector2 _mousePosition){

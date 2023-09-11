@@ -11,6 +11,8 @@ public interface IUnitTile
     public float Defense { get; }
     public float Speed { get; }
     public Vector2Int LocalPosition { get; }
+    public Player Owner { get; set; }
+    public bool Selected { get; set; }
 }
 
 // public class DummyUnitPiece : BaseTile, IUnitTile
@@ -60,6 +62,8 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     protected float _speed;
     protected GameObject _modelUse;
     protected UnitType _type;
+    protected bool selected;
+    protected Player owner;
 
     public override void Initialize()
     {
@@ -81,11 +85,20 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
         
     }
 
+    public void Select(Player player) {
+        if (!player.Equals(this.owner))
+            return;
+
+        this.selected = true;
+        Debug.Log("Selected Unit At Location: (" + this._localPosition.x + "," + this._localPosition.y + ")");
+    }
+
     public float Health { get { return _health; } }
     public float Attack { get { return _attack; } }
     public float Defense { get { return _defense; } }
     public float Speed { get { return _speed; } }
-
+    public Player Owner {get { return this.owner; } set { this.owner = value; }}
+    public bool Selected {get { return this.selected; } set { this.selected = value; }}
     //public abstract void Start();
     //public abstract void Update();
 }

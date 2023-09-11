@@ -25,7 +25,7 @@ public class PlayerHandle : MonoBehaviour
         Player newPlayer = new Player(teamColor);
 
         players.Add(newPlayer);
-        UnitHandle.SpawnUnitAt(new Vector2Int(15, 15), newPlayer, UnitType.MCV);
+        UnitHandle.SpawnUnitAt(new Vector2Int(15, 15), newPlayer, UnitType.Trike);
     }
 
     Color DetermineColorFromTeam(PlayerTeams _team)
