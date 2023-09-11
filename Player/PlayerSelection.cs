@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSelection
 {
-    private List<BaseUnitTile> unitsSelected = new();
+    private readonly List<BaseUnitTile> unitsSelected = new();
 
 
     public PlayerSelection() {
@@ -13,12 +13,14 @@ public class PlayerSelection
 
     
 
-    public void deselect() {
-
+    public void Deselect() {
+        this.unitsSelected.Clear();
     }
 
-    public void addSelectionFromArray(BaseUnitTile[] units) {
-        
+    public void AddSelectionFromArray(BaseUnitTile[] units) {
+        foreach (var unit in units) {
+            this.unitsSelected.Add(unit);
+        }
     }
 
     public List<BaseUnitTile> UnitsSelected { get { return this.unitsSelected; } }

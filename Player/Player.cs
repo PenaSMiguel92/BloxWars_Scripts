@@ -3,9 +3,9 @@ using UnityEngine;
 public class Player
 {
     private PlayerState playerState = PlayerState.Loading;
-    private InputHandle playerInput = new InputHandle();
-    private PlayerInputState playerInputState = new PlayerInputState();
-    private PlayerSelection playerSelection;
+    private InputHandle playerInput = new();
+    private PlayerInputState playerInputState = new();
+    private PlayerSelection playerSelection = new();
     private Color teamColor;
     private int credits;
     private Dictionary<string, BaseUnitTile> units;
@@ -19,7 +19,7 @@ public class Player
         this.playerSelection = new PlayerSelection();
         this.playerInput.onPlayerMouseLeftDown += MouseLeftDown;
         this.playerInput.onPlayerMouseMove += MouseMove;
-        this.playerState = PlayerState.Idle;
+        this.playerState = PlayerState.Playing;
     }
     void MouseMove(object _sender, InputValues _values)
     {
