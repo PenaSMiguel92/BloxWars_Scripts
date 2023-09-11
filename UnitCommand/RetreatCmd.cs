@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackCmd : Command {
+public class RetreatCmd : Command {
     public override void issueOrders() {
-        Debug.Log("attacking");
+        Debug.Log("Retreating");
     }
-
 }

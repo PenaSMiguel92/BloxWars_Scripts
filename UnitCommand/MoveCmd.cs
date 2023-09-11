@@ -5,6 +5,6 @@ using UnityEngine;
 
 public class MoveCmd : Command {
     public override void issueOrders() {
-        Debug.Log("test");
+        Debug.Log("moving");
     }
 }
