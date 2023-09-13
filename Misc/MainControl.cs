@@ -22,7 +22,7 @@ public class MainControl : MonoBehaviour
 
     void Awake() {
         MapGeneration.Tiles = _tiles;
-        UnitHandle.Tiles = _units;
+        UnitService.Tiles = _units;
     }
 
     void Start() {

@@ -3,29 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class UnitHandle
+public static class UnitService
 {
     private static BaseTileDefinition[] tiles;
     public static bool SpawnUnitAt(Vector2Int position, Player owner, UnitType unitType)
     {
         UnitTileDefinition _unitDefinition = (UnitTileDefinition)tiles[(int)unitType];
         List<TileInfo> _tileInfos = MainMap.GetRelativePositions(position, _unitDefinition, TileType.Unit);
-        if (MainMap.CheckPositions(_tileInfos, TileType.Unit))
-        {
-            Vector3 _unitLocation = MainMap.LocalToWorldPosition(position);
-            GameObject _unitObj = GameObject.Instantiate(_unitDefinition._modelUse, _unitLocation, new Quaternion());
-            BaseUnitTile _unitTile = _unitObj.GetComponent<BaseUnitTile>();
-            _unitTile.Definition = _unitDefinition;
-            _unitTile.Owner = owner;
-            _unitTile.Initialize();
-            string _strKey = position.x.ToString() + "," + position.y.ToString();
-            owner.Units.Add(_strKey, _unitTile);
-            return true;
-        }
-        else
-        {
-        return false;
-        }
+        if (!MainMap.CheckPositions(_tileInfos, TileType.Unit))
+            return false;
+        
+        Vector3 _unitLocation = MainMap.LocalToWorldPosition(position);
+        BaseUnitTile _unitTile = UnitFactory.BuildUnit(_unitDefinition, _unitLocation, owner);
+        string _strKey = position.x.ToString() + "," + position.y.ToString();
+        owner.Units.Add(_strKey, _unitTile);
+        return true;
     }
 
     public static BaseUnitTile[] GetUnits(int plrIndex)

@@ -131,7 +131,7 @@ public static class MainMap
                 }
             }
         }
-        return (_availableCount == infoTiles.Count);
+        return _availableCount == infoTiles.Count;
     }
     
     public static Vector2Int MapSize
