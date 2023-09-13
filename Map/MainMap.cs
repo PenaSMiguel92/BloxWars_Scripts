@@ -97,6 +97,10 @@ public static class MainMap
         return _tileInfos;
     }
 
+    public static void addUnitToMap(string key, BaseUnitTile unit) {
+        _unitMap.Add(key, unit);
+    }
+
     private static void AddPositionsToSummaryMap(List<TileInfo> infoTiles)
     {
         foreach(TileInfo _info in infoTiles)
