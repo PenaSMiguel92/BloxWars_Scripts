@@ -64,6 +64,9 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     protected UnitType _type;
     protected bool selected;
     protected Player owner;
+    protected Queue<Command> commands;
+    protected Coroutine commandCoroutine;
+    protected bool coroutineRunning = false;
 
     public override void Initialize()
     {
@@ -94,8 +97,19 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     }
 
     public void SendCommand(Command cmd) {
-        cmd.IssueOrders(this);
-        StartCoroutine(cmd.ExecuteOrders());
+        commands.Enqueue(cmd);
+    }
+
+    public void ExecuteCommands() {
+        if (commands.Count <= 0)
+            return;
+        if (coroutineRunning)
+            return;
+
+        if (commands.TryDequeue(out Command cmd)) {
+            cmd.IssueOrders(this);
+            commandCoroutine = StartCoroutine(cmd.ExecuteOrders());
+        }
     }
 
     public float Health { get { return _health; } }
@@ -104,6 +118,8 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     public float Speed { get { return _speed; } }
     public Player Owner {get { return this.owner; } set { this.owner = value; }}
     public bool Selected {get { return this.selected; } set { this.selected = value; }}
+
+    public bool CoroutineRunning {get { return this.coroutineRunning; } set { this.coroutineRunning = value; }}
     //public abstract void Start();
     //public abstract void Update();
 }

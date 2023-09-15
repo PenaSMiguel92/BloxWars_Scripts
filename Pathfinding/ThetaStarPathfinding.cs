@@ -7,7 +7,7 @@ public static class ThetaStarPathfinding
     private static readonly List<Vector2> closed = new();
     private static readonly BinaryHeap open = new();
     private static Dictionary<string, TileInfo> mapData;
-    public static List<Node> ThetaStarAlgorithm(Vector2 initial, Vector2 final, Dictionary<string, TileInfo> mapData, bool flyingUnit) //efficient pathfinding algorithm, seems to be near instantaneous, but likely O(log(N)) time complexity.
+    public static Queue<Node> ThetaStarAlgorithm(Vector2 initial, Vector2 final, Dictionary<string, TileInfo> mapData, bool flyingUnit) //efficient pathfinding algorithm, seems to be near instantaneous, but likely O(log(N)) time complexity.
     {
         closed.Clear();
         open.Clear();
@@ -20,7 +20,7 @@ public static class ThetaStarPathfinding
         {
             var currentNode = open.Pop();
             if (currentNode.distToEnd <= 0)
-                return ReconstructPath(new List<Node>(), currentNode);
+                return ReconstructPath(new Queue<Node>(), currentNode);
 
             closed.Add(currentNode.location);
 
@@ -69,9 +69,9 @@ public static class ThetaStarPathfinding
         }
     }
 
-    public static List<Node> ReconstructPath(List<Node> totalPath, Node nxtNode)
+    public static Queue<Node> ReconstructPath(Queue<Node> totalPath, Node nxtNode)
     {
-        totalPath.Add(nxtNode);
+        totalPath.Enqueue(nxtNode);
         if (nxtNode.parent != nxtNode)
         {
             return ReconstructPath(totalPath, nxtNode.parent);

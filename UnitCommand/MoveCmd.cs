@@ -5,15 +5,24 @@ using UnityEngine;
 
 public class MoveCmd : Command {
 
-    private List<Node> movePath;
+    private Queue<Node> movePath;
+    private BaseUnitTile bindedUnit;
     public MoveCmd(Vector2Int target, double radius) : base(target, radius) { }
     public override void IssueOrders(BaseUnitTile unit) {
         Dictionary<string, TileInfo> mapData = MainMap.SummaryMap;
+        bindedUnit = unit;
         movePath = ThetaStarPathfinding.ThetaStarAlgorithm(unit.LocalPosition, target, mapData, false);
     }
 
     public override IEnumerator ExecuteOrders() {
-        Debug.Log("executing moving orders");
-        yield return new WaitForEndOfFrame();
+        bindedUnit.CoroutineRunning = true;
+        do
+        {
+            if (movePath.TryDequeue(out Node nxtNode)) {
+                Debug.Log(nxtNode.location);
+            }
+            yield return new WaitForEndOfFrame();
+        } while (movePath.Count > 0);
+        bindedUnit.CoroutineRunning = false;
     }
 }
