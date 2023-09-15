@@ -26,13 +26,13 @@ public static class MainMap
 
     public static Vector3 LocalToWorldPosition(Vector2Int localPos)
     {
-        Vector3 _worldPos = new Vector3(localPos.x * MapTileSize.x + (MapTileSize.x/2), 0, localPos.y * MapTileSize.y + (MapTileSize.y/2));
+        Vector3 _worldPos = new(localPos.x * MapTileSize.x + (MapTileSize.x/2), 0, localPos.y * MapTileSize.y + (MapTileSize.y/2));
         return _worldPos;
     }
 
     public static Vector2Int WorldToLocalPosition(Vector3 worldPos)
     {
-        Vector2Int _localPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / MapTileSize.x), Mathf.RoundToInt(worldPos.z / MapTileSize.y));
+        Vector2Int _localPos = new(Mathf.RoundToInt(worldPos.x / MapTileSize.x), Mathf.RoundToInt(worldPos.z / MapTileSize.y));
         return _localPos;
     }
 
@@ -41,48 +41,44 @@ public static class MainMap
         _summaryMap = new Dictionary<string, TileInfo>();
         for (int _index = 0; _index < _mapSize.x * _mapSize.y; _index++)
         {
-            int x = _index % (int) _mapSize.x;
-            int y = _index / (int) _mapSize.x;
+            int x = _index % _mapSize.x;
+            int y = _index / _mapSize.x;
             string _strKey = x.ToString() + "," + y.ToString();
-            
-            if (!_summaryMap.ContainsKey(_strKey))
+
+            if (_summaryMap.ContainsKey(_strKey))
+                continue;
+
+            if (_unitMap.ContainsKey(_strKey))
             {
-
-                if (_unitMap.ContainsKey(_strKey))
+                if (_unitMap.TryGetValue(_strKey, out BaseTile _unitTile))
                 {
-                     BaseTile _unitTile;
-                    if (_unitMap.TryGetValue(_strKey, out _unitTile))
-                    {
-                        AddPositionsToSummaryMap(_unitTile.GetRelativeTileInfo(TileType.Unit));
-                        continue;
-                    }
+                    AddPositionsToSummaryMap(_unitTile.GetRelativeTileInfo(TileType.Unit));
+                    continue;
                 }
-                if (_buildingMap.ContainsKey(_strKey))
-                {
-                    BaseTile _buildingTile;
-                    if (_buildingMap.TryGetValue(_strKey, out _buildingTile))
-                    {
-                        AddPositionsToSummaryMap(_buildingTile.GetRelativeTileInfo(TileType.Building));
-                        continue;
-                    }
-                }
-
-                BaseTile _backgroundValue;
-                if (_backgroundMap.TryGetValue(_strKey, out _backgroundValue))
-                {
-                    BackgroundTile _bgValueConv = (BackgroundTile) _backgroundValue;
-                    TileInfo _tileUse = new TileInfo(_bgValueConv.Crossable, _bgValueConv.Constructable, TileType.Background, new Vector2Int(x,y));
-                    _summaryMap.Add(_strKey, _tileUse);
-                }
-                
             }
+            if (_buildingMap.ContainsKey(_strKey))
+            {
+                if (_buildingMap.TryGetValue(_strKey, out BaseTile _buildingTile))
+                {
+                    AddPositionsToSummaryMap(_buildingTile.GetRelativeTileInfo(TileType.Building));
+                    continue;
+                }
+            }
+
+            if (_backgroundMap.TryGetValue(_strKey, out BaseTile _backgroundValue))
+            {
+                BackgroundTile _bgValueConv = (BackgroundTile)_backgroundValue;
+                TileInfo _tileUse = new(_bgValueConv.Crossable, _bgValueConv.Constructable, TileType.Background, new Vector2Int(x, y));
+                _summaryMap.Add(_strKey, _tileUse);
+            }
+
         }
     }
 
     public static List<TileInfo> GetRelativePositions(Vector2Int position, BaseTileDefinition definition, TileType type)
     {
         const int _tileSize = 2;
-        List<TileInfo> _tileInfos = new List<TileInfo>();
+        List<TileInfo> _tileInfos = new();
         int _width = definition._structure.x * _tileSize;
         int _height = definition._structure.y * _tileSize;
         for (int _index = 0; _index < _width * _height; _index++)
@@ -90,14 +86,14 @@ public static class MainMap
             int _x = position.x + (_index % _width);
             int _y = position.y + (_index / _width);
 
-            TileInfo _newInfo = new TileInfo(false, false, type, new Vector2Int(_x, _y));
+            TileInfo _newInfo = new(false, false, type, new Vector2Int(_x, _y));
             _tileInfos.Add(_newInfo);
         }
 
         return _tileInfos;
     }
 
-    public static void addUnitToMap(string key, BaseUnitTile unit) {
+    public static void AddUnitToMap(string key, BaseUnitTile unit) {
         _unitMap.Add(key, unit);
     }
 
@@ -115,10 +111,9 @@ public static class MainMap
         int _availableCount = 0;
         foreach (TileInfo _info in infoTiles)
         {
-            TileInfo _value;
-            if (_summaryMap.TryGetValue(_info.HashKey, out _value))
+            if (_summaryMap.TryGetValue(_info.HashKey, out TileInfo _value))
             {
-                switch(type)
+                switch (type)
                 {
                     case TileType.Building:
                         if (_value.Constructable)

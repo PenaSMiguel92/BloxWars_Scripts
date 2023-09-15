@@ -17,7 +17,7 @@ public static class UnitService
         BaseUnitTile _unitTile = UnitFactory.BuildUnit(_unitDefinition, _unitLocation, owner);
         string _strKey = position.x.ToString() + "," + position.y.ToString();
         owner.Units.Add(_strKey, _unitTile);
-        MainMap.addUnitToMap(_strKey, _unitTile);
+        MainMap.AddUnitToMap(_strKey, _unitTile);
         return true;
     }
 
