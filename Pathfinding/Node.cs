@@ -10,19 +10,19 @@ public class Node //for use with pathfinding algorithm
 
     public Node(Vector2 _location,Vector2 _start, Vector2 _end)
     {
-        distToEnd = computeManhattanHeuristic(_location, _end); //hScore
-        distToStart = computeManhattanHeuristic(_start,_location); //gScore
+        distToEnd = ComputeManhattanHeuristic(_location, _end); //hScore
+        distToStart = ComputeManhattanHeuristic(_start,_location); //gScore
         Cost = distToEnd + distToStart; //tScore
         location = _location;
     }
 
-    public float computeManhattanHeuristic(Vector2 _initial, Vector2 _final)
+    public float ComputeManhattanHeuristic(Vector2 _initial, Vector2 _final)
     {
         Vector2 difference = _final - _initial;
         return Mathf.Abs(difference.x) + Mathf.Abs(difference.y);
     }
 
-    public float computeEuclideanHeuristic(Vector2 _initial, Vector2 _final)
+    public float ComputeEuclideanHeuristic(Vector2 _initial, Vector2 _final)
     {
         Vector2 difference = _final - _initial;
         return difference.magnitude;

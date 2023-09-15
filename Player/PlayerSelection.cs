@@ -8,20 +8,23 @@ public class PlayerSelection
 
 
     public PlayerSelection() {
-
+        
     }
 
-    
+    public void Select(BaseUnitTile unit, Player owner) {
+        unit.Select(owner);
+        unitsSelected.Add(unit);
+    }
 
     public void Deselect() {
-        this.unitsSelected.Clear();
+        unitsSelected.Clear();
     }
 
     public void AddSelectionFromArray(BaseUnitTile[] units) {
         foreach (var unit in units) {
-            this.unitsSelected.Add(unit);
+            unitsSelected.Add(unit);
         }
     }
 
-    public List<BaseUnitTile> UnitsSelected { get { return this.unitsSelected; } }
+    public List<BaseUnitTile> UnitsSelected { get { return unitsSelected; } }
 }

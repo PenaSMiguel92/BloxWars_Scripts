@@ -86,11 +86,11 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
     }
 
     public void Select(Player player) {
-        if (!player.Equals(this.owner))
+        if (!player.Equals(owner))
             return;
 
-        this.selected = true;
-        Debug.Log("Selected Unit At Location: (" + this._localPosition.x + "," + this._localPosition.y + ")");
+        selected = true;
+        Debug.Log("Selected Unit At Location: (" + _localPosition.x + "," + _localPosition.y + ")");
     }
 
     public float Health { get { return _health; } }

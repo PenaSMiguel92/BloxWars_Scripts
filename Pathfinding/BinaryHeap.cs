@@ -6,7 +6,7 @@ public class BinaryHeap //None of the data structures supported by C# function t
 
     public bool IsEmpty()
     {
-        return (Heap.Count <= 0);
+        return Heap.Count <= 0;
     }
     public void Insert(Node item)
     {

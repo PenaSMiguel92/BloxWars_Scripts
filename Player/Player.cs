@@ -4,7 +4,7 @@ using UnityEngine;
 public class Player
 {
     private PlayerState playerState = PlayerState.Loading;
-    private InputHandle playerInput = new();
+    private readonly InputHandle playerInput = new();
     private PlayerInputState playerInputState = new();
     private PlayerSelection playerSelection = new();
     private Color teamColor;
@@ -43,9 +43,9 @@ public class Player
         playerInputState.LeftMouseButtonDown = buttonstate;
         if (buttonstate) {
             string _strKey = _localMousePosition.x.ToString() + "," + _localMousePosition.y.ToString();
-            BaseUnitTile unit;
-            if (units.ContainsKey(_strKey) && units.TryGetValue(_strKey, out unit)) {
-                unit.Select(this);
+            if (units.ContainsKey(_strKey) && units.TryGetValue(_strKey, out BaseUnitTile unit))
+            {
+                playerSelection.Select(unit, this);
             }
         }
         
