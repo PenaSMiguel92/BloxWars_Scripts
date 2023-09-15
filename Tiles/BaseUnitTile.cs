@@ -93,6 +93,10 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
         Debug.Log("Selected Unit At Location: (" + _localPosition.x + "," + _localPosition.y + ")");
     }
 
+    public void SendCommand(Command cmd) {
+        cmd.IssueOrders(this);
+    }
+
     public float Health { get { return _health; } }
     public float Attack { get { return _attack; } }
     public float Defense { get { return _defense; } }

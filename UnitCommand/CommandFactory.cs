@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CommandFactory {
@@ -16,14 +14,14 @@ public class CommandFactory {
         return instance;
     }
 
-    public Command CreateCommand(PlayerOrders playerOrder) {
+    public Command CreateCommand(PlayerOrders playerOrder, Vector2 target, double radius) {
         return playerOrder switch
         {
-            PlayerOrders.Attack => new AttackCmd(),
-            PlayerOrders.Guard => new GuardCmd(),
-            PlayerOrders.Move => new MoveCmd(),
-            PlayerOrders.Patrol => new PatrolCmd(),
-            PlayerOrders.Retreat => new RetreatCmd(),
+            PlayerOrders.Attack => new AttackCmd(target, radius),
+            PlayerOrders.Guard => new GuardCmd(target, radius),
+            PlayerOrders.Move => new MoveCmd(target, radius),
+            PlayerOrders.Patrol => new PatrolCmd(target, radius),
+            PlayerOrders.Retreat => new RetreatCmd(target, radius),
             _ => null,
         };
     }
