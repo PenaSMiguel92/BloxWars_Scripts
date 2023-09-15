@@ -4,57 +4,66 @@ using UnityEngine;
 
 public static class ThetaStarPathfinding
 {
-    public static List<Node> ThetaStarAlgorithm(Vector2 initial,Vector2 final, Dictionary<string, BaseTile> mapData, bool flyingUnit) //efficient pathfinding algorithm, seems to be near instantaneous, but likely O(log(N)) time complexity.
+    private static readonly List<Vector2> closed = new();
+    private static readonly BinaryHeap open = new();
+    private static Dictionary<string, BaseTile> mapData;
+    public static List<Node> ThetaStarAlgorithm(Vector2 initial, Vector2 final, Dictionary<string, BaseTile> mapData, bool flyingUnit) //efficient pathfinding algorithm, seems to be near instantaneous, but likely O(log(N)) time complexity.
     {
-        List<Vector2> _closed = new();
-        BinaryHeap _open = new();
-        Node _startNode = new(initial, initial, final);
-        _startNode.parent = _startNode;
-        _open.Insert(_startNode);
-        while (!_open.IsEmpty())
+        closed.Clear();
+        open.Clear();
+        ThetaStarPathfinding.mapData = mapData;
+
+        Node startNode = new(initial, initial, final);
+        startNode.parent = startNode;
+        open.Insert(startNode);
+        while (!open.IsEmpty())
         {
-            var _currentNode = _open.Pop();
-            if (_currentNode.distToEnd <= 0)
-                return ReconstructPath(new List<Node>(), _currentNode);
+            var currentNode = open.Pop();
+            if (currentNode.distToEnd <= 0)
+                return ReconstructPath(new List<Node>(), currentNode);
 
-            _closed.Add(_currentNode.location);
-            for (int angle = 0; angle <= 3; angle++)
+            closed.Add(currentNode.location);
+
+            InspectSurroundingNodes(initial, final, currentNode, flyingUnit);
+        }
+        return null;
+    }
+
+    public static void InspectSurroundingNodes(Vector2 initial, Vector2 final, Node currentNode, bool flyingUnit) {
+        for (int angle = 0; angle <= 3; angle++)
+        {
+            Vector2 offset = new(Mathf.Floor(Mathf.Cos(angle*Mathf.PI)), 
+                                 Mathf.Floor(Mathf.Sin(angle*Mathf.PI)));
+            
+            Vector2 nxtLoc = currentNode.location + offset;
+            string nxtLocStr = nxtLoc.x.ToString() + "," + nxtLoc.y.ToString();
+            if ((nxtLoc != currentNode.location) && mapData.TryGetValue(nxtLocStr, out BaseTile value))
             {
-
-                Vector2 offset = new(Mathf.Floor(Mathf.Cos(angle*Mathf.PI)), 
-                                     Mathf.Floor(Mathf.Sin(angle*Mathf.PI)));
-                Vector2 _nxtLoc = _currentNode.location + offset;
-                string _nxtLocStr = _nxtLoc.x.ToString() + "," + _nxtLoc.y.ToString();
-                if ((_nxtLoc != _currentNode.location) && mapData.TryGetValue(_nxtLocStr, out BaseTile _value))
-                {
-                    if (!(_value.Crossable || flyingUnit))
-                        continue;
+                if (!(value.Crossable || flyingUnit))
+                    continue;
                         
-                    Node _nxtNode = new Node(_nxtLoc, initial, final);
-                    if (_closed.Contains(_nxtNode.location))
-                        continue;
+                Node nxtNode = new(nxtLoc, initial, final);
+                if (closed.Contains(nxtNode.location))
+                    continue;
 
-                    float _gScore = _currentNode.distToStart + _currentNode.ComputeEuclideanHeuristic(_currentNode.location, _nxtNode.location);
-                    if (!_open.Contains(_nxtNode))
+                float gScore = currentNode.distToStart + currentNode.ComputeEuclideanHeuristic(currentNode.location, nxtNode.location);
+                    if (!open.Contains(nxtNode))
                     {
-                        _nxtNode.distToStart = float.MaxValue;
-                        _nxtNode.parent = null;
+                        nxtNode.distToStart = float.MaxValue;
+                        nxtNode.parent = null;
                     }
-                    if (_gScore < _nxtNode.distToStart)
+                    if (gScore < nxtNode.distToStart)
                     {
-                        _nxtNode.distToStart = _gScore;
-                        _nxtNode.parent = _currentNode;
-                        _nxtNode.Cost = _nxtNode.distToStart + _nxtNode.distToEnd;
-                        if (_open.Contains(_nxtNode))
-                            _open.Remove(_nxtNode);
+                        nxtNode.distToStart = gScore;
+                        nxtNode.parent = currentNode;
+                        nxtNode.Cost = nxtNode.distToStart + nxtNode.distToEnd;
+                        if (open.Contains(nxtNode))
+                            open.Remove(nxtNode);
                         
-                        _open.Insert(_nxtNode);
+                        open.Insert(nxtNode);
                     }
                 }
             }
-
-        }
-        return null;
     }
 
     public static List<Node> ReconstructPath(List<Node> totalPath, Node nxtNode)

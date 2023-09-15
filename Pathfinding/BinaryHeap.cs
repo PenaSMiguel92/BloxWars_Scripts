@@ -2,11 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 public class BinaryHeap //None of the data structures supported by C# function the way I need them to, so here's my attempt to implement a binary tree data structure for an efficient priority queue for pathfinding.
 {
-    List<Node> Heap = new List<Node>();
+    private readonly List<Node> Heap = new();
 
     public bool IsEmpty()
     {
         return Heap.Count <= 0;
+    }
+
+    public void Clear() {
+        Heap.Clear();
     }
     public void Insert(Node item)
     {
