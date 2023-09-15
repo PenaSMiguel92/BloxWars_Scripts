@@ -10,7 +10,7 @@ public static class DataHandle
         BinaryWriter _binaryWriter = new BinaryWriter(_file, Encoding.UTF8, false);
         _binaryWriter.Write(JsonUtility.ToJson( _data));
         _file.Close();
-        Debug.Log("Data Saved!");
+        //Debug.Log("Data Saved!");
     }
     public static T LoadData<T>(string _filename){
         string _path = Application.persistentDataPath + "/" + _filename + ".dat";
@@ -18,7 +18,7 @@ public static class DataHandle
             FileStream _file = File.Open(_path, FileMode.Open);
             BinaryReader _binaryReader = new BinaryReader(_file, Encoding.UTF8, false);
             T _data = JsonUtility.FromJson<T>(_binaryReader.ReadString());
-            Debug.Log("Data Loaded!");
+            //Debug.Log("Data Loaded!");
             return _data;
         }
         else {

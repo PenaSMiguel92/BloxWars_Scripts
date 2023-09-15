@@ -14,7 +14,7 @@ public class CommandFactory {
         return instance;
     }
 
-    public Command CreateCommand(PlayerOrders playerOrder, Vector2 target, double radius) {
+    public Command CreateCommand(PlayerOrders playerOrder, Vector2Int target, double radius) {
         return playerOrder switch
         {
             PlayerOrders.Attack => new AttackCmd(target, radius),

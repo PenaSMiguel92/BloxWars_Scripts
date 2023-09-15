@@ -9,7 +9,7 @@ public class AttackCmd : Command {
         Debug.Log("issuing attacking orders");
     }
 
-    public override IEnumerable ExecuteOrders() {
+    public override IEnumerator ExecuteOrders() {
         Debug.Log("executing attack orders");
         yield return new WaitForEndOfFrame();
     }
