@@ -95,6 +95,7 @@ public abstract class BaseUnitTile : BaseTile, IUnitTile
 
     public void SendCommand(Command cmd) {
         cmd.IssueOrders(this);
+        StartCoroutine(cmd.ExecuteOrders());
     }
 
     public float Health { get { return _health; } }
