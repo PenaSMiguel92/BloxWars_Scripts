@@ -14,7 +14,7 @@ public class MainControl : MonoBehaviour
 
     public static MainControl main;
     private GameState _state = GameState.Loading;
-    public event EventHandler onGameBegin;
+    public event EventHandler OnGameBegin;
 
     MainControl(){
         main = this;
@@ -29,7 +29,7 @@ public class MainControl : MonoBehaviour
         if (_state != GameState.Loading) return;
         MainMap.InitializeMap(_mapSize, _mapTileSize);
         _state = GameState.Start;
-        onGameBegin?.Invoke(this, EventArgs.Empty);
+        OnGameBegin?.Invoke(this, EventArgs.Empty);
     }
 
     public GameState State { get { return _state; } }

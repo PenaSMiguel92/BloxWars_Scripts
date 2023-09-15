@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BuildingType {RocketTurret, Barracks, ConstructionYard, HeavyVehicleFactory, LightVehicleFactory, PowerPlant, RadarOutpost, Refinery, Slab_1x1, Slab_2x2, Storage, Turret}
+public enum BuildingType { Barracks, ConstructionYard, HeavyVehicleFactory, LightVehicleFactory, PowerPlant, RadarOutpost, Refinery, RocketTurret, Slab_1x1, Slab_2x2, Storage, Turret}
 
 public abstract class BaseBuildingTile : BaseTile
 {

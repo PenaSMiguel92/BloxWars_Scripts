@@ -6,7 +6,7 @@ public static class MapGeneration
 {
     
     private static BaseTileDefinition[] _tiles;
-    private static Vector2 _offset = new Vector2(Random.value * 50, Random.value * 50);
+    private static Vector2 _offset = new(Random.value * 50, Random.value * 50);
     private static readonly float _scale = 15f;
     private static Vector2Int _mapSize;
     private static Vector2Int _mapTileSize;

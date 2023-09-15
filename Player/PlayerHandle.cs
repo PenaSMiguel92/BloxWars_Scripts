@@ -9,7 +9,7 @@ public class PlayerHandle : MonoBehaviour
 
     void Awake() {
         
-        MainControl.main.onGameBegin += PlayerInitialization;
+        MainControl.main.OnGameBegin += PlayerInitialization;
         players = new List<Player>();
     }
 

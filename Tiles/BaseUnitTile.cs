@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum UnitType {CarryAll, Gunman, Harvester, HeavyInfantry, Infantry, Launcher, Missiler, MCV, Quad, SiegeTank, Tank, Trike}
+public enum UnitType {CarryAll, Gunman, Harvester, Infantry, HeavyInfantry, Launcher, Missiler, MCV, Quad, SiegeTank, Trike, Tank}
 public interface IUnitTile
 {
     public float Health { get; }
