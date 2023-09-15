@@ -36,34 +36,37 @@ public static class ThetaStarPathfinding
                                  Mathf.Floor(Mathf.Sin(angle*Mathf.PI)));
             
             Vector2 nxtLoc = currentNode.location + offset;
+            if (nxtLoc == currentNode.location)
+                continue;
+
             string nxtLocStr = nxtLoc.x.ToString() + "," + nxtLoc.y.ToString();
-            if ((nxtLoc != currentNode.location) && mapData.TryGetValue(nxtLocStr, out BaseTile value))
+            if (mapData.TryGetValue(nxtLocStr, out BaseTile value))
             {
                 if (!(value.Crossable || flyingUnit))
                     continue;
-                        
+
                 Node nxtNode = new(nxtLoc, initial, final);
                 if (closed.Contains(nxtNode.location))
                     continue;
 
                 float gScore = currentNode.distToStart + currentNode.ComputeEuclideanHeuristic(currentNode.location, nxtNode.location);
-                    if (!open.Contains(nxtNode))
-                    {
-                        nxtNode.distToStart = float.MaxValue;
-                        nxtNode.parent = null;
-                    }
-                    if (gScore < nxtNode.distToStart)
-                    {
-                        nxtNode.distToStart = gScore;
-                        nxtNode.parent = currentNode;
-                        nxtNode.Cost = nxtNode.distToStart + nxtNode.distToEnd;
-                        if (open.Contains(nxtNode))
-                            open.Remove(nxtNode);
-                        
-                        open.Insert(nxtNode);
-                    }
+                if (!open.Contains(nxtNode))
+                {
+                    nxtNode.distToStart = float.MaxValue;
+                    nxtNode.parent = null;
+                }
+                if (gScore < nxtNode.distToStart)
+                {
+                    nxtNode.distToStart = gScore;
+                    nxtNode.parent = currentNode;
+                    nxtNode.Cost = nxtNode.distToStart + nxtNode.distToEnd;
+                    if (open.Contains(nxtNode))
+                        open.Remove(nxtNode);
+                    
+                    open.Insert(nxtNode);
                 }
             }
+        }
     }
 
     public static List<Node> ReconstructPath(List<Node> totalPath, Node nxtNode)
