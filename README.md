@@ -4,6 +4,8 @@
 TODO:
 
 -implement unit selection, movement, and issuing commands.
---unit selection [ ]
+--fix unit placement on map [/ ]
+--fix selection [/]
+--unit selection [/ ]
 --unit movement [ ]
 --issuing commands [ ]

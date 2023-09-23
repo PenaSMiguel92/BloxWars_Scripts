@@ -12,12 +12,26 @@ public static class UnitService
         List<TileInfo> _tileInfos = MainMap.GetRelativePositions(position, _unitDefinition, TileType.Unit);
         if (!MainMap.CheckPositions(_tileInfos, TileType.Unit))
             return false;
-        
-        Vector3 _unitLocation = MainMap.LocalToWorldPosition(position);
+        Vector2Int minCorner = new(int.MaxValue, int.MaxValue);
+        Vector2Int maxCorner = new(int.MinValue, int.MinValue);
+        List<string> keys = new();
+        foreach (TileInfo tileInfo in _tileInfos)
+        {
+            Vector2Int tileInfoPos = tileInfo.Position;
+            string _strKey =  tileInfoPos.x.ToString() + "," +  tileInfoPos.y.ToString();
+            keys.Add(_strKey);
+            minCorner = new Vector2Int(Math.Min(minCorner.x, tileInfoPos.x), Math.Min(minCorner.y, tileInfoPos.y));
+            maxCorner = new Vector2Int(Math.Max(maxCorner.x, tileInfoPos.x), Math.Max(maxCorner.y, tileInfoPos.y));
+        }
+        Vector3 _unitLocation = MainMap.LocalToWorldPosition((maxCorner + minCorner)/2);
         BaseUnitTile _unitTile = UnitFactory.BuildUnit(_unitDefinition, _unitLocation, owner);
-        string _strKey = position.x.ToString() + "," + position.y.ToString();
-        owner.Units.Add(_strKey, _unitTile);
-        MainMap.AddUnitToMap(_strKey, _unitTile);
+
+        foreach (string strKey in keys)
+        {
+            owner.Units.Add(strKey, _unitTile);
+            MainMap.AddUnitToMap(strKey, _unitTile);
+        }
+       
         return true;
     }
 
